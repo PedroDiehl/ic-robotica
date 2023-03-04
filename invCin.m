@@ -22,7 +22,7 @@ function [theta1, theta2] = invCin(eePosition, a1, a2, angleUM, technique)
         case 'algebraic'
             % Confere se o ponto esta na area de trabalho do robo
             if (px^2 + py^2) > (a1 + a2)
-                error('The given end effector position is outside the arm reachable space');
+                error('The given end effector position is outside of the arm reachable space');
             end
             
             % Calcula os valores trigonométricos para theta2
@@ -40,7 +40,7 @@ function [theta1, theta2] = invCin(eePosition, a1, a2, angleUM, technique)
         case 'geometric'
             % Confere se o ponto esta na area de trabalho do robo
             if sqrt(px^2 + py^2) > (a1 + a2)
-                error('The given end effector position is outside the arm reachable space');
+                error('The given end effector position is outside of the arm reachable space');
             end
     
         otherwise
