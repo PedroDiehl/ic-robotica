@@ -6,22 +6,38 @@ Aluno: Pedro Henrique Diehl
 
 Utilizado para computar a cinemática inversa.
 
-@param eePosition - Posicao desejada para o efetuador final (vetor)
+@param eePosition - Posicao desejada para o efetuador final
+Vetor no formato [posicao_x; posicao_y] para o efetuador final
+
 @param a1 - Comprimento do elo 1
+Numero indicando o tamanho do elo 1
+
 @param a2 - Comprimento do elo 2
+Numero indicando o tamanho do elo 2
+
 @param angleUM - Unidade de medida para o angulo
+String indicando a unidade de medida na se deseja obter o angulo das juntas
+{deg, rad}
+
 @param technique - Tecnica utilizada para calculo
+String indicando a tecnica que deve ser empregada para realizar o calculo
+{alebraic, geometric}
 %}
 
 function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
+
     % Decompoe o vetor em x e y
-    px = eePosition(1);
-    py = eePosition(2);
+    if ~isequal(size(eePosition), size([1; 2]))
+        error('The desired end effector position dimensions informed are not valid')
+    end
+    
+    px = eePosition(1, 1);
+    py = eePosition(2, 1);
  
     switch technique
         case 'algebraic'
             % Confere se o ponto esta na area de trabalho do robo
-            if (px^2 + py^2) > (a1 + a2)
+            if ((px^2 + py^2) > (a1 + a2)) || (sqrt(px^2 + py^2) < (a1 - a2))
                 error('The given end effector position is outside of the arm reachable space');
             end
             
@@ -39,7 +55,7 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
             
         case 'geometric'
             % Confere se o ponto esta na area de trabalho do robo
-            if sqrt(px^2 + py^2) > (a1 + a2)
+            if sqrt(px^2 + py^2) > (a1 + a2) || (sqrt(px^2 + py^2) < (a1 - a2))
                 error('The given end effector position is outside of the arm reachable space');
             end
     
