@@ -37,21 +37,22 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
     switch technique
         case 'algebraic'
             % Confere se o ponto esta na area de trabalho do robo
-            if ((px^2 + py^2) > (a1 + a2)) || (sqrt(px^2 + py^2) < (a1 - a2))
+            if (sqrt(px^2 + py^2) > (a1 + a2)) || (sqrt(px^2 + py^2) < (a1 - a2))
                 error('The given end effector position is outside of the arm reachable space');
             end
             
             % Calcula os valores trigonométricos para theta2
             c2 = (px^2 + py^2 - a1^2 - a2^2) / (2 * a1 * a2);
+            
             s2 = sqrt(1 - c2^2);
-
+            
             ang_theta2 = atan2(s2, c2);
 
             % Cacula os valores trigonométricos para theta1
-            c1 = ((a1 + a2 * c2) * px - a2 * s2 * py) / (px^2 + py^2);
+            c1 = ((a1 + a2 * c2) * px + a2 * s2 * py) / (px^2 + py^2);
             s1 = ((a1 + a2 * c2) * py - a2 * s2 * px) / (px^2 + py^2);
 
-            ang_theta1 = atan2(c1, s1); 
+            ang_theta1 = atan2(s1, c1); 
             
         case 'geometric'
             % Confere se o ponto esta na area de trabalho do robo
