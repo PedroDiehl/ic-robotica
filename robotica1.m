@@ -11,10 +11,10 @@ format short
 clc, close all, clear all
 
 a1 = 1;
-a2 = 1;
+a2 = 2;
 
-x_ee = cosd(45) * (a1 + a2); 
-y_ee = sind(45) * (a1 + a2); 
+x_ee = 1;
+y_ee = 1;
 
 [theta1, theta2] = invKin([x_ee; y_ee], a1, a2, 'deg', 'algebraic')
 

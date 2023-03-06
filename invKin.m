@@ -66,12 +66,12 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
     
     switch angleUM
         case 'rad'
-            theta1 = ang_theta1;
-            theta2 = ang_theta2;
+            theta1 = round(ang_theta1, 2);
+            theta2 = round(ang_theta2, 2);
             
         case 'deg'
-            theta1 = rad2deg(ang_theta1);
-            theta2 = rad2deg(ang_theta2);
+            theta1 = round(rad2deg(ang_theta1), 2);
+            theta2 = round(rad2deg(ang_theta2), 2);
             
         otherwise
             error('Not valid angle unit informed.');
