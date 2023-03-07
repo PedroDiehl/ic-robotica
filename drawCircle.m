@@ -20,8 +20,8 @@ x_ee = 2;
 y_ee = 1;
 
 % Defasagem do circulo
-h = 1;
-k = 1;
+h = 1; % em x
+k = 1; % em y
 
 % Raio do circulo
 r = 1;
@@ -39,9 +39,7 @@ for phi = 0:0.01:(2 * pi)
     posicao_2 = rM('z', (theta1 + theta2), 'deg') * point_a2;
     
     figure(1)
-    plot([0 posicao_1(1)],  [0 posicao_1(2)], 'r', [posicao_1(1) (posicao_1(1) + posicao_2(1))], [posicao_1(2) (posicao_1(2) + posicao_2(2))], 'b', 'linewidth', 3);
-    grid on
-    axis([-3 3 -3 3]);
+    plotArm(posicao_1, posicao_2);
     
     figure(2)
     plot((posicao_1(1) + posicao_2(1)), (posicao_1(2) + posicao_2(2)), '.');

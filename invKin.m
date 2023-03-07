@@ -4,7 +4,7 @@ Universidade Federal de Pelotas
 Professor: Alexandre Molter
 Aluno: Pedro Henrique Diehl
 
-Utilizado para computar a cinemática inversa.
+Utilizado para computar a cinematica inversa.
 
 @param eePosition - Posicao desejada para o efetuador final
 Vetor no formato [posicao_x; posicao_y] para o efetuador final
