@@ -43,7 +43,6 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
             
             % Calcula os valores trigonométricos para theta2
             c2 = (px^2 + py^2 - a1^2 - a2^2) / (2 * a1 * a2);
-            
             s2 = sqrt(1 - c2^2);
             
             ang_theta2 = atan2(s2, c2);
@@ -51,7 +50,7 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
             % Cacula os valores trigonométricos para theta1
             c1 = ((a1 + a2 * c2) * px + a2 * s2 * py) / (px^2 + py^2);
             s1 = ((a1 + a2 * c2) * py - a2 * s2 * px) / (px^2 + py^2);
-
+            
             ang_theta1 = atan2(s1, c1); 
             
         case 'geometric'
@@ -66,12 +65,18 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
     
     switch angleUM
         case 'rad'
-            theta1 = round(ang_theta1, 2);
-            theta2 = round(ang_theta2, 2);
+            theta1 = ang_theta1;
+            %theta1 = round(ang_theta1, 2);
+            
+            theta2 = ang_theta2;
+            %theta2 = round(ang_theta2, 2);
             
         case 'deg'
-            theta1 = round(rad2deg(ang_theta1), 2);
-            theta2 = round(rad2deg(ang_theta2), 2);
+            theta1 = rad2deg(ang_theta1);
+            %theta1 = round(rad2deg(ang_theta1), 2);
+            
+            theta2 = rad2deg(ang_theta2);
+            %theta2 = round(rad2deg(ang_theta2), 2);
             
         otherwise
             error('Not valid angle unit informed.');
