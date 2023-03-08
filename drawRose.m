@@ -4,14 +4,14 @@ Universidade Federal de Pelotas
 Professor: Alexandre Molter
 Aluno: Pedro Henrique Diehl
 
-Utilizado para desenhar um circulo utilizando o manipulador.
+Utilizado para desenhar uma rosacea utilizando o manipulador.
 %}
 
 format short
 clc, close all, clear all
 
-a1 = 2;
-a2 = 2;
+a1 = 3;
+a2 = 3;
 
 point_a1 = [a1; 0; 0];
 point_a2 = [a2; 0; 0];
@@ -23,14 +23,15 @@ y_ee = 1;
 h = 1; % em x
 k = 1; % em y
 
-% Raio do circulo
-r = 1;
+% Pares de petalas
+n = 2;
 
 
 for phi = 0:0.01:(2 * pi)
     % Equacao parametrica para o circulo
-    p_circulo = [(h + r * cos(phi));
-                 (k + r * sin(phi))];
+    r_rosa = cos(2 * n * phi);
+    p_circulo = [h + (r_rosa * cos(phi));
+                 k + (r_rosa * sin(phi))];
  
     %p_circulo = [1; 2];
     [theta1, theta2] = invKin(p_circulo, a1, a2, 'deg', 'algebraic');
@@ -42,10 +43,10 @@ for phi = 0:0.01:(2 * pi)
     plotArm(posicao_1, posicao_2);
     
     figure(2)
-    plot((posicao_1(1) + posicao_2(1)), (posicao_1(2) + posicao_2(2)), '.');
+    plot((posicao_1(1) + posicao_2(1)), (posicao_1(2) + posicao_2(2)), '.', 'linewidth', 0.5);
     grid on
     hold on
     axis([-3 3 -3 3]);
   
-    pause(0.005);
+    pause(5e-12);
 end

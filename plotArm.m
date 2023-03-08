@@ -18,5 +18,5 @@ function plotArm(a1_position, a2_position)
         [a1_position(1) (a1_position(1) + a2_position(1))], [a1_position(2) (a1_position(2) + a2_position(2))],...
         'b', 'linewidth', 3);
     grid on
-    axis([-3 3 -3 3]);
+    axis([-5 5 -5 5]);
 end

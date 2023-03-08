@@ -43,6 +43,12 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
         case 'algebraic'
             % Calcula os valores trigonométricos para theta2
             c2 = (px^2 + py^2 - a1^2 - a2^2) / (2 * a1 * a2);
+            
+            % Confere se o ponto esta na area de trabalho do robo
+            if (c2 > 1) || (c2 < -1)
+                error('The given end effector position is outside of the arm reachable space');
+            end
+          
             s2 = sqrt(1 - c2^2);
             
             ang_theta2 = atan2(s2, c2);
