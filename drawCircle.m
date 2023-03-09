@@ -13,8 +13,13 @@ clc, close all, clear all
 a1 = 2;
 a2 = 2;
 
-point_a1 = [a1; 0; 0];
-point_a2 = [a2; 0; 0];
+rest_a1 = [a1;
+            0; 
+            0];
+        
+rest_a2 = [a2;
+           0;
+           0];
 
 % Defasagem
 h = 1; % em x
@@ -32,8 +37,8 @@ for phi = 0:0.01:(2 * pi)
     %p_circulo = [1; 2];
     [theta1, theta2] = invKin(p_circulo, a1, a2, 'deg', 'algebraic');
 
-    position_1 = rM('z', theta1, 'deg') * point_a1;
-    position_2 = rM('z', (theta1 + theta2), 'deg') * point_a2;
+    position_1 = rM('z', theta1, 'deg') * rest_a1;
+    position_2 = rM('z', (theta1 + theta2), 'deg') * rest_a2;
     
     figure(1)
     plotArm(position_1, position_2);
