@@ -11,11 +11,11 @@ format short
 clc, close all, clear all
 
 % Parametros dos elos do robo e do destino para o efetuador final
-a1 = 1;
-a2 = 2;
+a1 = 3;
+a2 = 3;
 
 x_ee = 2;
-y_ee = 2;
+y_ee = 1;
 
 % Representacao incial (ponto) do elo 1 em repouso partindo da origem
 point_a1 = [a1;
@@ -35,8 +35,8 @@ p_ee = [x_ee;
 [theta1, theta2] = invKin(p_ee, a1, a2, 'deg', 'algebraic')
 
 % Aplica a matriz de rotacao com os resultados obtidos nos pontos
-posicao_1 = rM('z', theta1, 'deg') * point_a1
-posicao_2 = rM('z', (theta1 + theta2), 'deg') * point_a2
+position_1 = rM('z', theta1, 'deg') * point_a1
+position_2 = rM('z', (theta1 + theta2), 'deg') * point_a2
 
 % Apresenta a combinacao resultante dos elos + juntas
-plotArm(posicao_1, posicao_2);
+plotArm(position_1, position_2);
