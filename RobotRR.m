@@ -98,41 +98,106 @@ classdef RobotRR
                % Posicao atual + ou -, cosseno ou seno da posicao atual na hipotenusa
                pDesloc = startPos + p * (dist / hipMag);
 
-               [theta1, theta2] = invKin(pDesloc,...
-                                         obj.links(1).size,...
-                                         obj.links(2).size,...
-                                         'deg',...
-                                         'algebraic');
+               [theta1, theta2] = obj.inverseKinematics(pDesloc,...
+                                                        'deg',...
+                                                        'algebraic');
 
                obj.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
                obj.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
 
-               grid on
-               figure(1)
-               obj.plotArm(obj.links(1).endPos, obj.links(2).endPos);
-               axis([-3 3 -3 3]);
+               obj.plotArm();
+               obj.plotAllMovement();
                
                figure(3)
                plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                     (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
                     'o', 'linewidth', 0.5);
+               grid on
                hold on
-               axis([-3 3 -3 3]);
+               axis([-6 6 -6 6])
 
-               %pause(1)
                pause(5e-12);
            end
        end
        % MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR
        
+       
+       % MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR
+       function moveManipulatorToRest(obj)
+           obj.moveManipulator(obj.links(1).restPos + obj.links(2).restPos);
+       end
+       % MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR
+       
+       
+       % GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO
        function plotArm(obj)
            figure(1)
            plot([0 obj.links(1).endPos(1)], [0 obj.links(1).endPos(2)], 'r',...
-               [obj.links(1).endPos(1) (obj.links(1).endPos(1) + obj.links(2).endPos(1))], [obj.links(1).endPos(2) (obj.links(1).endPos(2) + obj.links(2).endPos(2))], 'b',...
+                [obj.links(1).endPos(1) (obj.links(1).endPos(1) + obj.links(2).endPos(1))], [obj.links(1).endPos(2) (obj.links(1).endPos(2) + obj.links(2).endPos(2))], 'b',...
                'linewidth', 5);
            grid on
-           axis([-3 3 -3 3]);
+           axis([-6 6 -6 6]);
        end
+       % GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO
+       
+       
+       % GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO
+       function plotDraw(obj)
+           figure(2)
+           plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
+                (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
+                '.');
+           grid on
+           hold on
+           axis([-6 6 -6 6]);
+           pause(5e-12)
+       end
+       % GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO
+       
+       
+       % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
+       function plotAllMovement(obj, point)
+           figure(4)
+           plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
+                (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
+                '*', 'linewidth', 0.5);
+           grid on
+           hold on
+           axis([-6 6 -6 6]);
+           pause(5e-12)
+       end
+       % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
+       
+       
+       % DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO
+       function drawCircle(obj, xOffset, yOffset, radius)
+           % Equacao parametrica para o circulo
+           p_circulo = [(xOffset + radius * cos(0));
+                        (yOffset + radius * sin(0));
+                                    0];
+           
+           obj.moveManipulator(p_circulo);
+           obj.plotAllMovement();
+           
+           for phi = 0.1:0.1:(2 * pi)
+               % Equacao parametrica para o circulo
+               p_circulo = [(xOffset + radius * cos(phi));
+                            (yOffset + radius * sin(phi));
+                                        0];
+                                            
+               [theta1, theta2] = obj.inverseKinematics(p_circulo,...
+                                                        'deg',...
+                                                        'algebraic');
+
+               obj.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
+               obj.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
+               
+               obj.plotArm();
+               obj.plotDraw();
+               obj.plotAllMovement();
+           end
+       end
+       % DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO
    end
    % MÉTODOS MÉTODOS MÉTODOS MÉTODOS
 end

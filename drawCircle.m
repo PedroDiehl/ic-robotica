@@ -17,7 +17,7 @@ robot = RobotRR(a1, a2);
 
 % Defasagem
 h = 1; % em x
-k = 1; % em y
+k = -1; % em y
 
 % Raio do circulo
 r = 1;
