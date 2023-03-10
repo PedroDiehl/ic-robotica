@@ -25,12 +25,7 @@ String indicando a tecnica que deve ser empregada para realizar o calculo
 %}
 
 function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
-
-    % Decompoe o vetor em x e y
-    if ~isequal(size(eePosition), size([1; 2]))
-        error('The desired end effector position dimensions informed are not valid')
-    end
-    
+    % Decompoe o vetor em x e y 
     px = eePosition(1, 1);
     py = eePosition(2, 1);
  
@@ -60,17 +55,7 @@ function [theta1, theta2] = invKin(eePosition, a1, a2, angleUM, technique)
             ang_theta1 = atan2(s1, c1); 
             
         case 'geometric'
-            alpha = atan2(py, px);
-            beta = acos((px^2 + py^2 + a1^2 - a2^2) / (2 * a1 * sqrt(px^2 + py^2)));
-            
-            ang_theta1 = alpha + beta;
-            
-            c2 = (px^2 + py^2 - a1^2 - a2^2) / (2 * a1 * a2);
-            if ang_theta1 > 0
-                ang_theta2 = -acos(c2);
-            else
-                ang_theta2 = acos(c2);
-            end
+            disp('TODO');
     
         otherwise
             error('Not valid technique informed');

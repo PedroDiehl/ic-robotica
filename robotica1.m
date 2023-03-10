@@ -4,7 +4,7 @@ Universidade Federal de Pelotas
 Professor: Alexandre Molter
 Aluno: Pedro Henrique Diehl
 
-Utilizado para resolver as questoes referentes ao estudo de robotica.
+Utilizado para resolver as questoes referentes ao estudo de robotica 1.
 %}
 
 format short
