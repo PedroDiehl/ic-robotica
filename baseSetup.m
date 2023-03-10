@@ -8,9 +8,9 @@ Utilizado para fazer a configuracao base para uso do robo.
 %}
 
 
-function [robot, p_ee] = baseSetup(a1, a2, x_ee, y_ee)
+function [robot, endEffectorPos] = baseSetup(a1, a2, x_ee, y_ee)
     robot = RobotRR(a1, a2);
-    p_ee = [x_ee;
-            y_ee;
-            0];
+    endEffectorPos = [x_ee;
+                      y_ee;
+                      0];
 end

@@ -7,7 +7,7 @@ Aluno: Pedro Henrique Diehl
 Utilizado para computar a cinematica inversa.
 
 @param eePosition - Posicao desejada para o efetuador final
-Vetor no formato [posicao_x; posicao_y] para o efetuador final
+Vetor no formato [posicao_x; posicao_y; posicao_z] para o efetuador final
 
 @param a1 - Comprimento do elo 1
 Numero indicando o tamanho do elo 1

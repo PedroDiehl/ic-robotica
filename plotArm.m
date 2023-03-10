@@ -15,8 +15,8 @@ Vetor no formato [posicao_x; posicao_y; posicao_z]
 
 function plotArm(a1_position, a2_position)
     plot([0 a1_position(1)], [0 a1_position(2)], 'r',...
-        [a1_position(1) (a1_position(1) + a2_position(1))], [a1_position(2) (a1_position(2) + a2_position(2))],...
-        'b', 'linewidth', 3);
+        [a1_position(1) (a1_position(1) + a2_position(1))], [a1_position(2) (a1_position(2) + a2_position(2))], 'b',...
+        'linewidth', 5);
     grid on
-    axis([-6 6 -6 6]);
+    axis([-3 3 -3 3]);
 end

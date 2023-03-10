@@ -12,14 +12,7 @@ clc, close all, clear all
 
 a1 = 3;
 a2 = 3;
-
-rest_a1 = [a1; 
-           0; 
-           0];
-       
-rest_a2 = [a2; 
-           0; 
-           0];
+robot = RobotRR(a1, a2);
 
 % Defasagem
 h = 1; % em x
@@ -28,6 +21,12 @@ k = 1; % em y
 % Pares de petalas
 n = 2;
 
+points = [[1   1]...
+          [-1  1]...
+          [-1 -1]...
+          [1  -1]];
+
+for item       
 for phi = 0:0.01:(2 * pi)
     % Equacao parametrica para o circulo
     r_rosa = cos(2 * n * phi);

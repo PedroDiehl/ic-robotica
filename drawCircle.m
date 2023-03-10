@@ -13,13 +13,7 @@ clc, close all, clear all
 a1 = 2;
 a2 = 2;
 
-rest_a1 = [a1;
-            0; 
-            0];
-        
-rest_a2 = [a2;
-           0;
-           0];
+robot = RobotRR(a1, a2);
 
 % Defasagem
 h = 1; % em x
@@ -29,25 +23,33 @@ k = 1; % em y
 r = 1;
 
 
-for phi = 0:0.01:(2 * pi)
+for phi = 0:0.1:(2 * pi)
     % Equacao parametrica para o circulo
     p_circulo = [(h + r * cos(phi));
                  (k + r * sin(phi))];
  
     %p_circulo = [1; 2];
-    [theta1, theta2] = invKin(p_circulo, a1, a2, 'deg', 'algebraic');
+    [theta1, theta2] = invKin(p_circulo,...
+                        robot.links(1).size,...
+                        robot.links(2).size,...
+                        'deg',...
+                        'algebraic');
 
-    position_1 = rM('z', theta1, 'deg') * rest_a1;
-    position_2 = rM('z', (theta1 + theta2), 'deg') * rest_a2;
+    %position_1 = rM('z', theta1, 'deg') * rest_a1;
+    %position_2 = rM('z', (theta1 + theta2), 'deg') * rest_a2;
+    robot.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
+    robot.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
     
     figure(1)
-    plotArm(position_1, position_2);
+    plotArm(robot.links(1).endPos, robot.links(2).endPos);
     
     figure(2)
-    plot((position_1(1) + position_2(1)), (position_1(2) + position_2(2)), '.');
+    plot((robot.links(1).endPos(1) + robot.links(2).endPos(1)),...
+         (robot.links(1).endPos(2) + robot.links(2).endPos(2)),...
+         '.');
     grid on
     hold on
     axis([-3 3 -3 3]);
   
-    pause(0.005);
+    pause(5e-12);
 end
