@@ -93,7 +93,7 @@ classdef RobotRR
            % Magnitude da hipotenusa para avancar sobre
            hipMag = sqrt(dist(1)^2 + dist(2)^2 + dist(3)^2);
 
-           for p = 0:0.1:hipMag
+           for p = 0:0.3:hipMag
                % Decompoe a hipotenusa em x e y atraves do uso de cossenos e senos
                % Posicao atual + ou -, cosseno ou seno da posicao atual na hipotenusa
                pDesloc = startPos + p * (dist / hipMag);
@@ -108,10 +108,11 @@ classdef RobotRR
                obj.plotArm();
                obj.plotAllMovement();
                
-               figure(3)
+               subplot(2,2,3)
+               %figure(3)
                plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                     (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
-                    'o', 'linewidth', 0.5);
+                    '.', 'linewidth', 0.0001);
                grid on
                hold on
                title('Movimento de deslocamento')
@@ -132,7 +133,8 @@ classdef RobotRR
        
        % GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO
        function plotArm(obj)
-           figure(1)
+           subplot(2,2,1)
+           %figure(1)
            plot([0 obj.links(1).endPos(1)], [0 obj.links(1).endPos(2)], 'r',...
                 [obj.links(1).endPos(1) (obj.links(1).endPos(1) + obj.links(2).endPos(1))], [obj.links(1).endPos(2) (obj.links(1).endPos(2) + obj.links(2).endPos(2))], 'b',...
                'linewidth', 5);
@@ -146,7 +148,8 @@ classdef RobotRR
        
        % GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO
        function plotDraw(obj)
-           figure(2)
+           subplot(2,2,2)
+           %figure(2)
            plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                 (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
                 '.');
@@ -161,10 +164,11 @@ classdef RobotRR
        
        % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
        function plotAllMovement(obj)
-           figure(4)
+           subplot(2,2,4)
+           %figure(4)
            plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                 (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
-                '*', 'linewidth', 0.5);
+                '.', 'linewidth', 0.0001);
            grid on
            hold on
            title('Movimento total')
@@ -184,7 +188,7 @@ classdef RobotRR
            obj.moveManipulator(p_circulo);
            obj.plotAllMovement();
            
-           for phi = 0.1:0.1:(2 * pi)
+           for phi = 0:0.1:(2 * pi)
                % Equacao parametrica para o circulo
                p_circulo = [(xOffset + radius * cos(phi));
                             (yOffset + radius * sin(phi));
@@ -203,6 +207,40 @@ classdef RobotRR
            end
        end
        % DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO
+       
+       
+      % DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA
+       function drawRose(obj, xOffset, yOffset, petalPairs)
+           r_rosa = cos(2 * petalPairs * 0);
+           
+           % Equacao parametrica para a rosacea
+           p_rosa = [xOffset + (r_rosa * cos(0));
+                     yOffset + (r_rosa * sin(0));
+                                0];
+           
+           obj.moveManipulator(p_rosa);
+           obj.plotAllMovement();
+           
+           for phi = 0:0.01:(2 * pi)
+               r_rosa = cos(2 * petalPairs * phi);
+               
+               p_rosa = [xOffset + (r_rosa * cos(phi));
+                         yOffset + (r_rosa * sin(phi));
+                                    0];
+                                            
+               [theta1, theta2] = obj.inverseKinematics(p_rosa,...
+                                                        'deg',...
+                                                        'algebraic');
+
+               obj.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
+               obj.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
+               
+               obj.plotArm();
+               obj.plotDraw();
+               obj.plotAllMovement();
+           end
+       end
+       % DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA
    end
    % MÉTODOS MÉTODOS MÉTODOS MÉTODOS
 end
