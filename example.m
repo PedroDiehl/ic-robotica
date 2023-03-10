@@ -28,5 +28,6 @@ robot.moveManipulator(endEffectorPos);
 
 % Desenha um circulo
 robot.drawCircle(1, -1, 1);
-robot.moveManipulatorToRest();
-robot.drawCircle(-2, -1, 0.5);
+%robot.moveManipulatorToRest();
+%robot.drawCircle(-2, -1, 0.5);
+%robot.moveManipulatorToRest();

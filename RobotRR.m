@@ -114,6 +114,7 @@ classdef RobotRR
                     'o', 'linewidth', 0.5);
                grid on
                hold on
+               title('Movimento de deslocamento')
                axis([-6 6 -6 6])
 
                pause(5e-12);
@@ -136,7 +137,9 @@ classdef RobotRR
                 [obj.links(1).endPos(1) (obj.links(1).endPos(1) + obj.links(2).endPos(1))], [obj.links(1).endPos(2) (obj.links(1).endPos(2) + obj.links(2).endPos(2))], 'b',...
                'linewidth', 5);
            grid on
+           title('Movimento dos elos')
            axis([-6 6 -6 6]);
+           pause(5e-12)
        end
        % GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO
        
@@ -149,6 +152,7 @@ classdef RobotRR
                 '.');
            grid on
            hold on
+           title('Movimento de desenho')
            axis([-6 6 -6 6]);
            pause(5e-12)
        end
@@ -156,13 +160,14 @@ classdef RobotRR
        
        
        % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
-       function plotAllMovement(obj, point)
+       function plotAllMovement(obj)
            figure(4)
            plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                 (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
                 '*', 'linewidth', 0.5);
            grid on
            hold on
+           title('Movimento total')
            axis([-6 6 -6 6]);
            pause(5e-12)
        end
