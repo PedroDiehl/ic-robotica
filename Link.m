@@ -12,6 +12,7 @@ classdef Link < handle
       size
       endPos
       zTheta
+      yTheta
       restPos
    end
    
@@ -22,22 +23,25 @@ classdef Link < handle
    
         obj.endPos = [a; 
                       0; 
-                      0];
+                      1];
                   
         obj.restPos = [a;
                        0;
-                       0];
+                       1];
                    
         obj.zTheta = 0;
+        
+        %TODO TODO TODO TODO (SUBIR DESCER)
+        obj.yTheta = asind(0.5 / a);
     end
    end
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR
    
    % MÉTODOS MÉTODOS MÉTODOS MÉTODOS
    methods
-       function endPos = updateEndPos(obj, rM, theta)
-           obj.zTheta = theta;
-           obj.endPos = rM * obj.restPos;
+       function endPos = updateEndPos(obj, rMz, zTheta)
+           obj.zTheta = zTheta;
+           obj.endPos = rMz * obj.restPos;
            endPos = obj.endPos;
        end
    end
