@@ -12,7 +12,6 @@ classdef Link < handle
       size
       endPos
       zTheta
-      yTheta
       restPos
    end
    
@@ -20,19 +19,16 @@ classdef Link < handle
    methods        
     function obj = Link(a)
         obj.size = a;
-   
-        obj.endPos = [a; 
-                      0; 
-                      1];
-                  
-        obj.restPos = [a;
-                       0;
-                       1];
-                   
+
+        obj.endPos = [obj.size; 
+                          0; 
+                          0];
+                     
+        obj.restPos = [obj.size; 
+                          0; 
+                          0];
+
         obj.zTheta = 0;
-        
-        %TODO TODO TODO TODO (SUBIR DESCER)
-        obj.yTheta = asind(0.5 / a);
     end
    end
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR

@@ -24,7 +24,7 @@ endEffectorPos = [x_ee;
 robot = RobotRR(a1, a2);
 
 % Move o manipulador para a posicao desejada
-robot.moveManipulator(endEffectorPos);
+%robot.moveManipulator(endEffectorPos);
 
 % Desenha um circulo
 robot.drawCircle(1, -1, 1);

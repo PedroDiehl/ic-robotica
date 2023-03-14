@@ -86,14 +86,14 @@ classdef RobotRR
        % MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR
        function moveManipulator(obj, pDesired)
            startPos = obj.links(1).endPos + obj.links(2).endPos;
-
+           
            % Vetor de distancia do deslocamento
            dist = pDesired - startPos;
-
+           
            % Magnitude da hipotenusa para avancar sobre
            hipMag = sqrt(dist(1)^2 + dist(2)^2 + dist(3)^2);
 
-           for p = 0:0.3:hipMag
+           for p = 0:0.1:hipMag
                % Decompoe a hipotenusa em x e y atraves do uso de cossenos e senos
                % Posicao atual + ou -, cosseno ou seno da posicao atual na hipotenusa
                pDesloc = startPos + p * (dist / hipMag);
@@ -108,11 +108,13 @@ classdef RobotRR
                obj.plotArm();
                obj.plotAllMovement();
                
-               subplot(2,2,3)
+               subplot(2,3,5)
                %figure(3)
                plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                     (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
                     '.', 'linewidth', 0.0001);
+               xlabel('eixo x')
+               ylabel('eixo y')
                grid on
                hold on
                title('Movimento de deslocamento')
@@ -121,7 +123,7 @@ classdef RobotRR
                pause(5e-12);
            end
        end
-       % MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR
+       % MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR       
        
        
        % MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR MOVER MANIPULADOR
@@ -133,26 +135,30 @@ classdef RobotRR
        
        % GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO
        function plotArm(obj)
-           subplot(2,2,1)
+           subplot(2,3,1)
            %figure(1)
            plot([0 obj.links(1).endPos(1)], [0 obj.links(1).endPos(2)], 'r',...
                 [obj.links(1).endPos(1) (obj.links(1).endPos(1) + obj.links(2).endPos(1))], [obj.links(1).endPos(2) (obj.links(1).endPos(2) + obj.links(2).endPos(2))], 'b',...
                'linewidth', 5);
+           xlabel('eixo x')
+           ylabel('eixo y')
            grid on
-           title('Movimento dos elos')
+           title('Movimento dos elos (x, y)')
            axis([-6 6 -6 6]);
            pause(5e-12)
        end
        % GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO GRAFICAR BRACO
        
-       
+
        % GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO
        function plotDraw(obj)
-           subplot(2,2,2)
+           subplot(2,3,6)
            %figure(2)
            plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                 (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
                 '.');
+           xlabel('eixo x')
+           ylabel('eixo y')
            grid on
            hold on
            title('Movimento de desenho')
@@ -164,11 +170,13 @@ classdef RobotRR
        
        % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
        function plotAllMovement(obj)
-           subplot(2,2,4)
+           subplot(2,3,4)
            %figure(4)
            plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                 (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
                 '.', 'linewidth', 0.0001);
+           xlabel('eixo x')
+           ylabel('eixo y')
            grid on
            hold on
            title('Movimento total')
@@ -177,7 +185,7 @@ classdef RobotRR
        end
        % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
        
-       
+  
        % DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO
        function drawCircle(obj, xOffset, yOffset, radius)
            % Equacao parametrica para o circulo
@@ -187,7 +195,7 @@ classdef RobotRR
            
            obj.moveManipulator(p_circulo);
            obj.plotAllMovement();
-           
+     
            for phi = 0:0.1:(2 * pi)
                % Equacao parametrica para o circulo
                p_circulo = [(xOffset + radius * cos(phi));
