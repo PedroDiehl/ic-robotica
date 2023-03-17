@@ -20,7 +20,7 @@ classdef RobotRR
    end
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR
    
-   % MÉTODOS MÉTODOS MÉTODOS MÉTODOS
+   % METODOS METODOS METODOS METODOS
    methods
        % CINEMÁTICA INVERSA CINEMÁTICA INVERSA CINEMÁTICA INVERSA CINEMÁTICA INVERSA
        function [theta1, theta2] = inverseKinematics(obj, eePosition, angleUM, technique)
@@ -156,7 +156,7 @@ classdef RobotRR
            %figure(2)
            plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
                 (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
-                '.');
+                '.', 'linewidth', 1e-12);
            xlabel('eixo x')
            ylabel('eixo y')
            grid on
@@ -168,8 +168,26 @@ classdef RobotRR
        % GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO GRAFICAR DESENHO
        
        
-       % GRAFICAR DESENHO LIVRE GRAFICAR DESENHO LIVRE GRAFICAR DESENHO LIVRE
-       function plotFreeDraw(obj, pDesired)   
+       % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
+       function plotAllMovement(obj)
+           subplot(2,4,2)
+           %figure(4)
+           plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
+                (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
+                '.', 'linewidth', 0.0001);
+           xlabel('eixo x')
+           ylabel('eixo y')
+           grid on
+           hold on
+           title('Movimento total')
+           axis([-6 6 -6 6]);
+           pause(5e-12)
+       end
+       % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
+       
+       
+       % DESENHAR LINHA DESENHAR LINHA DESENHAR LINHA DESENHAR LINHA DESENHAR LINHA
+       function drawLine(obj, pDesired)   
            startPos = obj.links(1).endPos + obj.links(2).endPos;
            
            % Vetor de distancia do deslocamento
@@ -209,38 +227,34 @@ classdef RobotRR
                pause(5e-12);
            end
        end
-       % GRAFICAR DESENHO LIVRE GRAFICAR DESENHO LIVRE GRAFICAR DESENHO LIVRE
-       
-       
-       % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
-       function plotAllMovement(obj)
-           subplot(2,4,2)
-           %figure(4)
-           plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
-                (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
-                '.', 'linewidth', 0.0001);
-           xlabel('eixo x')
-           ylabel('eixo y')
-           grid on
-           hold on
-           title('Movimento total')
-           axis([-6 6 -6 6]);
-           pause(5e-12)
-       end
-       % GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO GRAFICAR TODO MOVIMENTO
-       
+       % DESENHAR LINHA DESENHAR LINHA DESENHAR LINHA DESENHAR LINHA DESENHAR LINHA
   
+       
        % DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO
-       function drawCircle(obj, xOffset, yOffset, radius)
+       function drawCircle(obj, xOffset, yOffset, radius, orientation)
+           %{
+            Se 1 em orientation, direita para esquerda
+            Se -1 em orientation, esquerda para direita
+           %}
+           switch orientation
+               case -1
+                   startingPoint = 2 * pi;
+                   circlePoints = startingPoint:-0.1:0;
+               case 1
+                   startingPoint = 0;
+                   circlePoints = startingPoint:0.1:(2 * pi);
+               otherwise
+                   error('Wrong orientation informed to drawCircle function');
+           end
            % Equacao parametrica para o circulo
-           p_circulo = [(xOffset + radius * cos(0));
-                        (yOffset + radius * sin(0));
+           p_circulo = [(xOffset + radius * cos(startingPoint));
+                        (yOffset + radius * sin(startingPoint));
                                     0];
            
            obj.moveManipulator(p_circulo);
            obj.plotAllMovement();
-     
-           for phi = 0:0.1:(2 * pi)
+           
+           for phi = circlePoints
                % Equacao parametrica para o circulo
                p_circulo = [(xOffset + radius * cos(phi));
                             (yOffset + radius * sin(phi));
@@ -261,19 +275,96 @@ classdef RobotRR
        % DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO
        
        
+       % DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO
+       function drawHalfCircle(obj, xOffset, yOffset, radius, orientation, upperOrLower)
+           %{
+            Se 1 em orientation, direita para esquerda
+            Se -1 em orientation, esquerda para direita
+           %}
+           %{
+            Se 1 em upperOrLower, parte superior do semicirculo
+            Se -1 em upperOrLower, parte inferior do semicirculo
+           %}
+           switch orientation
+               case -1
+                   startingPoint = pi;
+                   switch upperOrLower
+                       case -1
+                           halfCirclePoints = startingPoint:0.1:(2 * pi);
+                       case 1
+                           halfCirclePoints = startingPoint:-0.1:0;
+                       otherwise
+                   end
+               case 1
+                   startingPoint = 0;
+                  switch upperOrLower
+                       case -1
+                           halfCirclePoints = startingPoint:-0.1:-pi;
+                       case 1
+                           halfCirclePoints = startingPoint:0.1:pi;
+                      otherwise
+                           error('Wrong upperOrLower value informed to drawCircle function');
+                  end
+               otherwise
+                   error('Wrong orientation value informed to drawCircle function');
+           end
+           
+           % Equacao parametrica para o circulo
+           p_circulo = [(xOffset + radius * cos(startingPoint));
+                        (yOffset + radius * sin(startingPoint));
+                                    0];
+           
+           obj.moveManipulator(p_circulo);
+           obj.plotAllMovement();
+           
+           for phi = halfCirclePoints
+               % Equacao parametrica para o circulo
+               p_circulo = [(xOffset + radius * cos(phi));
+                            (yOffset + radius * sin(phi));
+                                        0];
+                                            
+               [theta1, theta2] = obj.inverseKinematics(p_circulo,...
+                                                        'deg',...
+                                                        'algebraic');
+
+               obj.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
+               obj.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
+               
+               obj.plotArm();
+               obj.plotDraw();
+               obj.plotAllMovement();
+           end
+       end
+       % DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO
+       
+       
        % DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA
-       function drawRose(obj, xOffset, yOffset, petalPairs)
-           r_rosa = cos(2 * petalPairs * 0);
+       function drawRose(obj, xOffset, yOffset, petalPairs, orientation)
+           %{
+            Se 1 em orientation, direita para esquerda
+            Se -1 em orientation, esquerda para direita
+           %}
+           switch orientation
+               case -1
+                   startingPoint = 2 * pi;
+                   rosePoints = startingPoint:-0.01:0;
+               case 1
+                   startingPoint = 0;
+                   rosePoints = startingPoint:0.01:(2 * pi);
+               otherwise
+                   error('Wrong orientation informed to drawRose function');
+           end
+           r_rosa = cos(2 * petalPairs * startingPoint);
            
            % Equacao parametrica para a rosacea
-           p_rosa = [xOffset + (r_rosa * cos(0));
-                     yOffset + (r_rosa * sin(0));
+           p_rosa = [xOffset + (r_rosa * cos(startingPoint));
+                     yOffset + (r_rosa * sin(startingPoint));
                                 0];
            
            obj.moveManipulator(p_rosa);
            obj.plotAllMovement();
            
-           for phi = 0:0.01:(2 * pi)
+           for phi = rosePoints
                r_rosa = cos(2 * petalPairs * phi);
                
                p_rosa = [xOffset + (r_rosa * cos(phi));
@@ -293,6 +384,12 @@ classdef RobotRR
            end
        end
        % DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA
+       
+       
+       % DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE
+       function drawCardioid(obj, xOffset, yOffset, OQUE_VAI_AQUI, orientation)
+       end
+       % DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE
    end
-   % MÉTODOS MÉTODOS MÉTODOS MÉTODOS
+   % METODOS METODOS METODOS METODOS
 end

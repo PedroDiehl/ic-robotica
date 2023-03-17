@@ -33,7 +33,7 @@ classdef Link < handle
    end
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR
    
-   % MÉTODOS MÉTODOS MÉTODOS MÉTODOS
+   % METODOS METODOS METODOS METODOS
    methods
        function endPos = updateEndPos(obj, rMz, zTheta)
            obj.zTheta = zTheta;
@@ -41,5 +41,5 @@ classdef Link < handle
            endPos = obj.endPos;
        end
    end
-   % MÉTODOS MÉTODOS MÉTODOS MÉTODOS
+   % METODOS METODOS METODOS METODOS
 end

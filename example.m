@@ -25,27 +25,25 @@ robot = RobotRR(a1, a2);
 
 
 % Move o manipulador para a posicao desejada
+%{
 robot.moveManipulator([3; 0; 0]);
 
-robot.plotFreeDraw([1; -1; 0]);
-robot.plotFreeDraw([-1; -1; 0]);
-robot.plotFreeDraw([-3; 0; 0]);
-robot.plotFreeDraw([0; 0; 0]);
-robot.plotFreeDraw([0; 3.5; 0]);
+robot.drawLine([1; -1; 0]);
+robot.drawLine([-1; -1; 0]);
+robot.drawLine([-3; 0; 0]);
+robot.drawLine([0; 0; 0]);
+robot.drawLine([0; 3.5; 0]);
 robot.moveManipulator([0; 3; 0]);
-robot.plotFreeDraw([2; 2; 0]);
-robot.plotFreeDraw([0; 2; 0]);
+robot.drawLine([2; 2; 0]);
+robot.drawLine([0; 2; 0]);
 
 robot.moveManipulator([0; 0; 0]);
-
-robot.plotFreeDraw([3; 0; 0]);
-%robot.moveManipulator([-2; -2; 0]);
-%robot.moveManipulator([-2; 2; 0]);
-%robot.moveManipulator([2; 2; 0]);
+robot.drawLine([3; 0; 0]);
+%}
 
 % Desenha um circulo
-%robot.drawCircle(1, -1, 1);
-
+%robot.drawCircle(1, -1, 1, -1);
+robot.drawHalfCircle(1, -1, 1, -1, 1);
 % Desenha uma rosacea
 %robot.drawRose(1, 2, 1);
 
