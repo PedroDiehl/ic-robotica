@@ -16,19 +16,19 @@ classdef Link < handle
    end
    
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR
-   methods        
-    function obj = Link(a)
-        obj.size = a;
+   methods  
+       function obj = Link(a)
+           obj.size = a;
 
-        obj.endPos = [obj.size; 
-                          0; 
-                          0];
+           obj.endPos = [obj.size; 
+                            0; 
+                            0];
                      
-        obj.restPos = [obj.size; 
-                          0; 
-                          0];
+           obj.restPos = [obj.size; 
+                            0; 
+                            0];
 
-        obj.zTheta = 0;
+           obj.zTheta = 0;
     end
    end
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR

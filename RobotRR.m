@@ -13,10 +13,10 @@ classdef RobotRR
    end
    
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR
-   methods        
-    function obj = RobotRR(a1, a2)
-        obj.links = [Link(a1) Link(a2)];
-    end
+   methods
+       function obj = RobotRR(a1, a2)
+          obj.links = [Link(a1) Link(a2)];
+       end
    end
    % CONSTRUTOR CONSTRUTOR CONSTRUTOR
    
@@ -212,18 +212,6 @@ classdef RobotRR
                obj.plotAllMovement();
                obj.plotDraw();
                
-               %subplot(2,4,3)
-               %figure(3)
-               %plot((obj.links(1).endPos(1) + obj.links(2).endPos(1)),...
-               %     (obj.links(1).endPos(2) + obj.links(2).endPos(2)),...
-               %     '.', 'linewidth', 0.0001);
-               %xlabel('eixo x')
-               %ylabel('eixo y')
-               %grid on
-               %hold on
-               %title('Movimento de deslocamento')
-               %axis([-6 6 -6 6])
-               
                pause(5e-12);
            end
        end
@@ -275,8 +263,8 @@ classdef RobotRR
        % DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO DESENHAR CIRCULO
        
        
-       % DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO
-       function drawHalfCircle(obj, xOffset, yOffset, radius, orientation, upperOrLower)
+       % DESENHAR MEIO CIRCULO NA HORIZONTAL DESENHAR MEIO CIRCULO NA HORIZONTAL
+       function drawHorizontalHalfCircle(obj, xOffset, yOffset, radius, orientation, upperOrLower)
            %{
             Se 1 em orientation, direita para esquerda
             Se -1 em orientation, esquerda para direita
@@ -335,7 +323,71 @@ classdef RobotRR
                obj.plotAllMovement();
            end
        end
-       % DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO DESENHAR MEIO CIRCULO
+       % DESENHAR MEIO CIRCULO NA HORIZONTAL DESENHAR MEIO CIRCULO NA HORIZONTAL
+       
+       
+       % DESENHAR MEIO CIRCULO NA VERTICAL DESENHAR MEIO CIRCULO NA VERTICAL
+       function drawVerticalHalfCircle(obj, xOffset, yOffset, radius, highOrLowStart, rightOrLeft)
+           %{
+            Se 1 em highOrLowStart, inicio do desenho em cima
+            Se -1 em highOrLowStart, inicio do desenho embaixo
+           %}
+           %{
+            Se 1 em rightOrLeft, parte direita do semicirculo
+            Se -1 em rightOrLeft, parte esquerda do semicirculo
+           %}
+           switch highOrLowStart
+               case -1
+                   startingPoint = -pi / 2;
+                   switch rightOrLeft
+                       case -1
+                           halfCirclePoints = startingPoint:-0.1:(-3 * pi / 2);
+                       case 1
+                           halfCirclePoints = startingPoint:0.1:(pi / 2);
+                       otherwise
+                           error('Wrong rightOrLeft value informed to drawCircle function');
+                   end
+               case 1
+                   startingPoint = pi / 2;
+                  switch rightOrLeft
+                       case -1
+                           halfCirclePoints = startingPoint:0.1:(3 * pi / 2);
+                       case 1
+                           halfCirclePoints = startingPoint:-0.1:(-pi / 2);
+                      otherwise
+                           error('Wrong rightOrLeft value informed to drawCircle function');
+                  end
+               otherwise
+                   error('Wrong orientation value informed to drawCircle function');
+           end
+           
+           % Equacao parametrica para o circulo
+           p_circulo = [(xOffset + radius * cos(startingPoint));
+                        (yOffset + radius * sin(startingPoint));
+                                    0];
+           
+           obj.moveManipulator(p_circulo);
+           obj.plotAllMovement();
+           
+           for phi = halfCirclePoints
+               % Equacao parametrica para o circulo
+               p_circulo = [(xOffset + radius * cos(phi));
+                            (yOffset + radius * sin(phi));
+                                        0];
+                                            
+               [theta1, theta2] = obj.inverseKinematics(p_circulo,...
+                                                        'deg',...
+                                                        'algebraic');
+
+               obj.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
+               obj.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
+               
+               obj.plotArm();
+               obj.plotDraw();
+               obj.plotAllMovement();
+           end
+       end
+       % DESENHAR MEIO CIRCULO NA VERTICAL DESENHAR MEIO CIRCULO NA VERTICAL
        
        
        % DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA DESENHAR ROSACEA
@@ -387,7 +439,105 @@ classdef RobotRR
        
        
        % DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE
-       function drawCardioid(obj, xOffset, yOffset, OQUE_VAI_AQUI, orientation)
+       function drawHorizontalCardioid(obj, xOffset, yOffset, circlesRadius, orientation, rightOrLeft)
+           %{
+            Se 1 em orientation, direita para esquerda
+            Se -1 em orientation, esquerda para direita
+           %}
+           %{
+            Se 1 em rightOrLeft, cardioide tombada para direita
+            Se -1 em rightOrLeft, cardioide tombada para esquerda
+           %}
+           switch orientation
+               case -1
+                   startingPoint = 2 * pi;
+                   cardioidPoints = startingPoint:-0.01:0;
+               case 1
+                   startingPoint = 0;
+                   cardioidPoints = startingPoint:0.01:(2 * pi);
+               otherwise
+                   error('Wrong orientation informed to drawRose function');
+           end
+           r_cardioid = 2 * circlesRadius * (1 - rightOrLeft * cos(startingPoint));
+           
+           % Equacao parametrica para a rosacea
+           p_cardioid = [xOffset + (r_cardioid * cos(startingPoint));
+                         yOffset + (r_cardioid * sin(startingPoint));
+                                        0];
+           
+           obj.moveManipulator(p_cardioid);
+           obj.plotAllMovement();
+           
+           for phi = cardioidPoints
+               r_cardioid = 2 * circlesRadius * (1 - rightOrLeft * cos(phi));
+               
+               p_cardioid = [xOffset + (r_cardioid * cos(phi));
+                             yOffset + (r_cardioid * sin(phi));
+                                            0];
+                                   
+               [theta1, theta2] = obj.inverseKinematics(p_cardioid,...
+                                                        'deg',...
+                                                        'algebraic');
+
+               obj.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
+               obj.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
+               
+               obj.plotArm();
+               obj.plotDraw();
+               obj.plotAllMovement();
+           end
+       end
+       % DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE
+       
+       
+       % DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE
+       function drawVerticalCardioid(obj, xOffset, yOffset, circlesRadius, orientation, inverted)
+           %{
+            Se 1 em orientation, direita para esquerda
+            Se -1 em orientation, esquerda para direita
+           %}
+           %{
+            Se 1 em inverted, cardioide ponta cabeca
+            Se -1 em inverted, cardioide na orientacao vertical correta
+           %}
+           switch orientation
+               case -1
+                   startingPoint = 2 * pi;
+                   cardioidPoints = startingPoint:-0.01:0;
+               case 1
+                   startingPoint = 0;
+                   cardioidPoints = startingPoint:0.01:(2 * pi);
+               otherwise
+                   error('Wrong orientation informed to drawRose function');
+           end
+           r_cardioid = 2 * circlesRadius * (1 + inverted * sin(startingPoint));
+           
+           % Equacao parametrica para a rosacea
+           p_cardioid = [xOffset + (r_cardioid * cos(startingPoint));
+                         yOffset + (r_cardioid * sin(startingPoint));
+                                        0];
+           
+           obj.moveManipulator(p_cardioid);
+           obj.plotAllMovement();
+           
+           for phi = cardioidPoints
+               r_cardioid = 2 * circlesRadius * (1 + inverted * sin(phi));
+               
+               p_cardioid = [xOffset + (r_cardioid * cos(phi));
+                             yOffset + (r_cardioid * sin(phi));
+                                            0];
+                                   
+               [theta1, theta2] = obj.inverseKinematics(p_cardioid,...
+                                                        'deg',...
+                                                        'algebraic');
+
+               obj.links(1).updateEndPos(rM('z', theta1, 'deg'), theta1);
+               obj.links(2).updateEndPos(rM('z', (theta1 + theta2), 'deg'), theta2);
+               
+               obj.plotArm();
+               obj.plotDraw();
+               obj.plotAllMovement();
+           end
        end
        % DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE DESENHAR CARDIOIDE
    end
