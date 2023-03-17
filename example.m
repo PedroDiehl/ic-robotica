@@ -14,22 +14,41 @@ clc, close all, clear all
 a1 = 3; % Comprimento do primeiro elo
 a2 = 3; % Comprimento do segundo elo
 
-x_ee = -2;
-y_ee = 2;
-endEffectorPos = [x_ee;
-                  y_ee;
-                  0];
-
 % Cria uma instancia do robo
 robot = RobotRR(a1, a2);
 
+%x_ee = -2;
+%y_ee = 2;
+%endEffectorPos = [x_ee;
+%                  y_ee;
+%                  0];
+
+
 % Move o manipulador para a posicao desejada
-%robot.moveManipulator(endEffectorPos);
+robot.moveManipulator([3; 0; 0]);
+
+robot.plotFreeDraw([1; -1; 0]);
+robot.plotFreeDraw([-1; -1; 0]);
+robot.plotFreeDraw([-3; 0; 0]);
+robot.plotFreeDraw([0; 0; 0]);
+robot.plotFreeDraw([0; 3.5; 0]);
+robot.moveManipulator([0; 3; 0]);
+robot.plotFreeDraw([2; 2; 0]);
+robot.plotFreeDraw([0; 2; 0]);
+
+robot.moveManipulator([0; 0; 0]);
+
+robot.plotFreeDraw([3; 0; 0]);
+%robot.moveManipulator([-2; -2; 0]);
+%robot.moveManipulator([-2; 2; 0]);
+%robot.moveManipulator([2; 2; 0]);
 
 % Desenha um circulo
-robot.drawCircle(1, -1, 1);
+%robot.drawCircle(1, -1, 1);
 
 % Desenha uma rosacea
-%robot.drawRose(-1, 1, 2);
+%robot.drawRose(1, 2, 1);
 
 robot.moveManipulatorToRest();
+
+%robot.drawRose(1, -1, 1);
